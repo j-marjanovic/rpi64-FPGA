@@ -44,9 +44,7 @@ initial begin
 	out_reg	<= 1'b1;
 
 	forever begin
-		$display("dasd");
-
-		#40_000_000;
+		#1_000_000; // #40_000_000;
 
 		out_reg	<= 1'b0;
 		#4_000;

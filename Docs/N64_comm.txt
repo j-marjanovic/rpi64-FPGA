@@ -1,6 +1,9 @@
 
 N64 communication
 
+Voltage = 3.3V
+Current = 15mA
+
 period = 40ms
 
        0     1     2     3     4     5     6     7
@@ -20,3 +23,4 @@ period = 40ms
 
 0 impulse duration: 0.8us
 1 impulse duration: 2.0us - 2.8us
+single bit duration: 4us
