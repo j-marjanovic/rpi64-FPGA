@@ -4,28 +4,39 @@ module proto1_top(
 	output	[3:0]	LEDS
 );
 
+reg	reset = 1;
+reg [31:0] rst_cntr = 0;
+
+always @ (posedge CLK_33) begin
+	if (rst_cntr < 3_000_000) begin
+		rst_cntr	<= rst_cntr + 1;
+		reset	<= 1'b1;
+	end else begin
+		reset	<= 1'b0;
+	end
+end
+
 
 reg	go;
-reg	reset;
 reg	select;
 
 reg [31:0] 	counter;
 
 
 always @ (posedge CLK_33) begin
-	if (counter == 30_000) begin
+	if (counter == 300_000) begin
 		counter	<= 0;
 		if( select ) 
 			go	<= 1;
 		else 
-			reset	<= 1;
+			//reset	<= 1;
 		
 		select	<= !select;
 		
 	end else begin
 		counter	<= counter + 1;
 		go	<= 0;
-		reset	<= 0;
+		//reset	<= 0;
 	end
 end
 

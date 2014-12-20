@@ -40,14 +40,16 @@ reg			count;
 reg 		dout;
 assign din = (state == S_REQ0 || state == S_REQ1 || state == S_REQS) ?  dout : 1'bz;
 
-reg din_prev;
+reg din_s;
+reg din_ss;
+reg din_sss;
 
 localparam PULSE_0_DELAY		= 30 * (CLK_FREQ/10_000_000); // 3.0us 
 localparam PULSE_1_DELAY		= 10 * (CLK_FREQ/10_000_000); // 1.0us 
 localparam PULSE_STOP_TIME		= 30 * (CLK_FREQ/10_000_000); // 3.0us 
 localparam PULSE_FULL_TIME		= 40 * (CLK_FREQ/10_000_000); // 4.0us 
 
-localparam PULSE_SAMPLE_DELAY 	= 20 * (CLK_FREQ/10_000_000); // 2.0us
+localparam PULSE_SAMPLE_DELAY 	= 25 * (CLK_FREQ/10_000_000); // 2.5us
 
 always @ (posedge clk)
 	if (reset) begin
@@ -56,8 +58,10 @@ always @ (posedge clk)
 	end else begin
 
 		data_valid	<= 0;
-		din_prev	<= din;
-
+		din_s		<= din;
+		din_ss		<= din_s;
+		din_sss		<= din_ss;
+		
 		case (state)
 		//=================================================
 		S_IDLE: begin
@@ -112,7 +116,7 @@ always @ (posedge clk)
 		end
 		//=================================================
 		S_RECV: begin
-			if (din_prev && !din) begin
+			if (din_sss && !din_ss) begin
 				count		<= 1;
 				pulse_cntr	<= 0;
 			end
@@ -120,7 +124,7 @@ always @ (posedge clk)
 			if (count) begin
 				if(pulse_cntr == PULSE_SAMPLE_DELAY) begin
 					count		<= 0;
-					data_out	<= {din, data_out[31:1]}; // LSB first
+					data_out	<= {din_ss, data_out[31:1]}; // LSB first
 					if (bit_cntr == 31) begin
 						state		<= S_IDLE;
 						data_valid	<= 1;
@@ -131,6 +135,10 @@ always @ (posedge clk)
 					pulse_cntr	<= pulse_cntr + 1;
 				end
 			end
+		end
+		//=================================================
+		default: begin
+			state	<= S_IDLE;
 		end
 		//=================================================
 		endcase
