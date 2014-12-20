@@ -1,0 +1,42 @@
+#################################
+# iCEblink40 HX1K Demonstration Design
+# Family & Device:    iCE40HX1K
+# Package:            VQ100
+#################################
+
+###IOSet List 22
+
+# Capacitive-sense buttons
+#set_io BTN1 60 -pullup yes
+#set_io BTN2 57 -pullup yes
+#set_io BTN3 54 -pullup yes
+#set_io BTN4 52 -pullup yes
+
+# LED outputs
+set_io LEDS[0] 59
+set_io LEDS[1] 56
+set_io LEDS[2] 53
+set_io LEDS[3] 51
+
+# 33 MHz clock input
+set_io CLK_33 13
+
+# Digilent ADEPT2 USB interface
+#set_io ASTB 26
+#set_io DB[0] 42
+#set_io DB[1] 41
+#set_io DB[2] 40
+#set_io DB[3] 37
+#set_io DB[4] 36
+#set_io DB[5] 34
+#set_io DB[6] 30
+#set_io DB[7] 29
+#set_io DSTB 27
+#set_io WAIT 33
+#set_io WRITE 28 
+
+# SPI Flash enable control
+#set_io SS_B 49
+
+# N64 controller
+set_io N64_din 65
