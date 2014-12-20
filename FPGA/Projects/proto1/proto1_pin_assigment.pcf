@@ -40,3 +40,11 @@ set_io CLK_33 13
 
 # N64 controller
 set_io N64_din 65
+
+# SPI
+#set_io CS_n 49
+#set_io MISO 45
+#set_io SCLK 48
+set_io CS_n 25
+set_io MISO 24
+set_io SCLK 20 -pullup yes
