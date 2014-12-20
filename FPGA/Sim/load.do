@@ -16,7 +16,10 @@ sim:/N64_recv_tb/reset
 
 add wave -divider "Communication"
 add wave -position insertpoint  \
-sim:/N64_recv_tb/din
+sim:/N64_recv_tb/data \
+sim:/N64_recv_tb/DUT/dout \
+sim:/N64_recv_tb/go	
+
 
 add wave -divider "Output"
 add wave -position insertpoint -radix hex \
@@ -30,4 +33,10 @@ sim:/N64_recv_tb/DUT/bit_cntr \
 sim:/N64_recv_tb/DUT/pulse_cntr \
 sim:/N64_recv_tb/DUT/count
 
+add wave -divider "Controls"
+add wave -position insertpoint  \
+sim:/N64_recv_tb/A \
+sim:/N64_recv_tb/B
 
+
+run -All

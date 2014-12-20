@@ -17,33 +17,36 @@ module N64_controller
 	input yellow_UP, yellow_DOWN, yellow_LEFT, yellow_RIGHT,
 	input gray_UP, gray_DOWN, gray_LEFT, gray_RIGHT,
 	input [7:0] joystick_X, joystick_Y,
-	wire out
+	inout out
 );
 
 
-logic out_reg;
+logic out_reg = 1'bz;
 assign out = out_reg;
 
 task out_0();
-	out_reg	= 1'b1;
-	#800;
 	out_reg	= 1'b0;
 	#3_200;
+	out_reg	= 1'b1;
+	#800;
 endtask
 
 task out_1();
-	out_reg	= 1'b1;
-	#2_500;
 	out_reg	= 1'b0;
 	#1_500;
+	out_reg	= 1'b1;
+	#2_500;
 endtask
 
-
+task out_Z();
+	out_reg	= 1'bz;
+endtask
 
 initial begin
-	out_reg	<= 1'b1;
+	out_Z();
 
 	forever begin
+		/*
 		#1_000_000; // #40_000_000;
 
 		out_reg	<= 1'b0;
@@ -55,6 +58,26 @@ initial begin
 		end
 		out_1();
 		out_1();
+		*/
+		
+		int i = 0;
+		byte header = 0;
+		
+		repeat(9) begin
+			@(negedge out) begin
+				#(2us)
+				if( i < 8 ) header <= {header[6:1], out}; 
+				i++;			
+			end
+		end
+		
+		if( header != 8'h01 ) begin
+			$display("%t: N64 controller: wrong header (%x), not responing to request", $time(), header);
+			continue;
+		end
+		
+		$display("%t: N64 controller: Header OK", $time());
+		#(1us)	
 
 		// A, B, Z, START
 		if( A )		out_1(); else out_0();
@@ -92,7 +115,10 @@ initial begin
 			if( joystick_Y[i] )	out_1(); else out_0();
 		end
 
-		out_reg	<= 1'b1;
+		out_1();
+		
+		out_Z();
+		
 	end
 end
 

@@ -15,7 +15,9 @@ module N64_recv_tb;
 
 bit		clk = 0;
 bit		reset = 0;
-wire		din;
+
+bit go = 0;
+//wire		din;
 
 wire [31:0] 	data_out;
 wire		data_valid;
@@ -24,38 +26,53 @@ bit A, B, R, L, Z, START;
 bit yellow_UP, yellow_DOWN, yellow_LEFT, yellow_RIGHT;
 bit gray_UP, gray_DOWN, gray_LEFT, gray_RIGHT;
 bit [7:0] joystick_X, joystick_Y;
-wire out;
+tri1 data;
 
-assign din = out;
-
-//=============================================================================
-always #50 clk = !clk;
+//assign din = out;
 
 //=============================================================================
-N64_controller N64_controller_inst ( .* );
-N64_recv DUT ( .* );
+always #16 clk = !clk;
+
+//=============================================================================
+N64_controller N64_controller_inst ( .out (data), .* );
+N64_recv DUT ( .din(data),  .* );
 
 //=============================================================================
 initial begin
 	$display(" N64 recv module test ");
 
-	#100;
-	reset = 1;
-	#100;
-	reset = 0;
+	fork
+	begin
+		#100;
+		reset = 1;
+		#100;
+		reset = 0;
 
-	#(3ms);
-	A = 1;
+		#(1ms);
+		A = 1;
 
-	#(1ms);
-	B = 1;
+		#(1ms);
+		B = 1;
+/*
+		#(1ms);
+		R = 1;
 
-	#(1ms);
-	R = 1;
-
-	#(1ms);
-	L = 1;
+		#(1ms);
+		L = 1;*/
+	end
+	begin
+		repeat (3) begin
+			@(posedge clk)
+				go	<= 1;
+			@(posedge clk)
+				go	<= 0;
+				
+			#(1ms);
+		end
+	end
+	join
 	
+	$stop();
 end
 
 
