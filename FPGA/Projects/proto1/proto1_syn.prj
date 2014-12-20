@@ -4,6 +4,7 @@
 
 add_file -verilog -lib work "proto1_top.v" 
 add_file -verilog -lib work "../../RTL/N64_recv.v" 
+add_file -verilog -lib work "../../RTL/reset_gen.v" 
 add_file -constraint -lib work "timing_constraints.sdc"
 #implementation: "proto1_Implmnt"
 impl -add proto1_Implmnt -type fpga

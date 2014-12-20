@@ -4,43 +4,32 @@ module proto1_top(
 	output	[3:0]	LEDS
 );
 
-reg	reset = 1;
-reg [31:0] rst_cntr = 0;
+//=============================================================================
+wire reset;
 
-always @ (posedge CLK_33) begin
-	if (rst_cntr < 3_000_000) begin
-		rst_cntr	<= rst_cntr + 1;
-		reset	<= 1'b1;
-	end else begin
-		reset	<= 1'b0;
-	end
-end
+reset_gen  # (
+	.NR_CLK_CYCLES ( 3_000_000	)
+) reset_gen_inst (
+	.clk	( CLK_33	),	
+	.reset	( reset	)
+);
 
-
+//=============================================================================
 reg	go;
-reg	select;
-
 reg [31:0] 	counter;
-
 
 always @ (posedge CLK_33) begin
 	if (counter == 300_000) begin
 		counter	<= 0;
-		if( select ) 
-			go	<= 1;
-		else 
-			//reset	<= 1;
-		
-		select	<= !select;
-		
+		go	<= 1;
 	end else begin
 		counter	<= counter + 1;
 		go	<= 0;
-		//reset	<= 0;
 	end
 end
 
 
+//=============================================================================
 
 wire data_valid;
 wire [31:0] data_out;
@@ -54,7 +43,7 @@ always @ (posedge CLK_33) begin
 	end
 end
 
-
+//=============================================================================
 N64_recv N64_recv_inst (
 	.clk	( CLK_33		),	
 	.reset	( reset		),
