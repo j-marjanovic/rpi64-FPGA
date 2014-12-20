@@ -9,6 +9,21 @@
 //                          JAN MARJANOVIC, 2014                             //
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// SPI on RPi should use CPHA = 0, CPOL = 0
+//
+//                   +----+    +----+    +----+    +----+
+//   SCK             |    |    |    |    |    |    |    |
+//          ---------+    +----+    +----+    +----+    +----
+//                        .         .         .         .
+//                        .         .         .         .
+//           --\./-------\./-------\./-------\./-------\./---
+//   MxSx       X   D7    X   D6    X   D5    X    D4   X
+//           --/.\-------/.\-------/.\-------/.\-------/.\---
+//
+///////////////////////////////////////////////////////////////////////////////
 `timescale 1ns/100ps
 
 module SPI_slave # (
@@ -19,12 +34,12 @@ module SPI_slave # (
 	input			reset,
 
 	input			SCLK,
-	input			MOSI,
+	//input			MOSI,
 	output 			MISO,
-	input			CS_n
+	input			CS_n,
 
-	output [31:0] 	data_in,
-	output 			data_valid
+	input [31:0] 	data_in,
+	input 			data_valid
 );
 
 
@@ -40,8 +55,8 @@ always @ (posedge clk) begin
 	CS_n_sss<= CS_n_ss;
 end
 
-wire CS_n_posedge = (CS_n_ss == 1'b0) && (CS_n_sss == 1'b1);
-wire CS_n_negedge = (CS_n_ss == 1'b1) && (CS_n_sss == 1'b0);
+wire CS_n_posedge = (CS_n_sss == 1'b0) && (CS_n_ss == 1'b1);
+wire CS_n_negedge = (CS_n_sss == 1'b1) && (CS_n_ss == 1'b0);
 
 //=============================================================================
 // SCLK detection
@@ -59,8 +74,8 @@ always @ (posedge clk) begin
 	SCLK_sss<= SCLK_ss;
 end
 
-wire SCLK_posedge = (SCLK_ss == 1'b0) && (SCLK_sss == 1'b1);
-wire SCLK_negedge = (SCLK_ss == 1'b1) && (SCLK_sss == 1'b0);
+wire SCLK_posedge = (SCLK_sss == 1'b0) && (SCLK_ss == 1'b1);
+wire SCLK_negedge = (SCLK_sss == 1'b1) && (SCLK_ss == 1'b0);
 
 
 
@@ -88,7 +103,7 @@ always @ (posedge clk) begin
 	if (reset) begin
 		state	<= S_IDLE;
 	end else begin
-		case (state) begin
+		case (state)
 		//---------------------------------------------------------------------
 		S_IDLE: begin
 			if (CS_n_negedge) begin
@@ -100,11 +115,13 @@ always @ (posedge clk) begin
 		end
 		//---------------------------------------------------------------------
 		S_COMM: begin
-			if( SCLK_posedge ) 		tmp_reg	<= {1'b0, tmp_reg[31:1]};
+			if( SCLK_negedge ) 		tmp_reg	<= {1'b0, tmp_reg[31:1]};
 
 			if( CS_n_posedge )		state	<= S_IDLE;
 		end
 		//---------------------------------------------------------------------
-		end
+		endcase
 	end
 end
+
+endmodule

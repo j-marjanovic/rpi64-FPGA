@@ -4,7 +4,7 @@ if { [file exists work] } { vdel -lib work -all}
 
 vlib work
 vlog -sv N64_controller.sv
-vlog ../RTL/N64_recv.v
+vlog ../../RTL/N64_recv.v
 vlog -sv N64_recv_tb.sv
 
 vsim work.N64_recv_tb
