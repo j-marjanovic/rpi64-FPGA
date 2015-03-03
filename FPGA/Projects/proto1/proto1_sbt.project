@@ -1,11 +1,11 @@
 [Project]
 ProjectVersion=2.0
-Version=Lattice Semiconductor Corporation iCEcube - Release: 2014.08.26723 - Build Date: Sep 19 2014 11:42:35
+Version=Lattice Semiconductor Corporation iCEcube - Release: 2014.12.27052 - Build Date: Dec 8 2014 15:51:44
 ProjectName=proto1
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=proto1_top.v=work,../../RTL/N64_recv.v=work,../../RTL/reset_gen.v=work,../../RTL/SPI_slave.v
-ProjectCFiles=timing_constraints.sdc
+ProjectVFiles=proto1_top.v=work,../../RTL/reset_gen.v=work,../../RTL/SPI_slave.v=work,../../RTL/N64_recv.v=work
+ProjectCFiles=
 CurImplementation=proto1_Implmnt
 Implementations=proto1_Implmnt
 StartFromSynthesis=yes
@@ -82,5 +82,5 @@ BitmapSetSecurity=no
 BitmapSetNoUsedIONoPullup=no
 FloorPlannerShowFanInNets=yes
 FloorPlannerShowFanOutNets=yes
-HookTo3rdPartyTextEditor=no
+HookTo3rdPartyTextEditor=yes
 
