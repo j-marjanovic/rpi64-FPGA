@@ -1,16 +1,8 @@
 #################################
-# iCEblink40 HX1K Demonstration Design
-# Family & Device:    iCE40HX1K
-# Package:            VQ100
+# Raspbendo 64
+# proto1 pin assigments
 #################################
 
-###IOSet List 22
-
-# Capacitive-sense buttons
-#set_io BTN1 60 -pullup yes
-#set_io BTN2 57 -pullup yes
-#set_io BTN3 54 -pullup yes
-#set_io BTN4 52 -pullup yes
 
 # LED outputs
 set_io LEDS[0] 82
@@ -27,6 +19,30 @@ set_io N64_din 89	# CTRL1
 set_io CS_n 49
 set_io MISO 45
 set_io SCLK 48 -pullup yes
-#set_io CS_n 25
-#set_io MISO 24
-#set_io SCLK 20 -pullup yes
+
+###########################################################
+# Cartridge
+
+set_io CART_AD[0]        2
+set_io CART_AD[1]        3
+set_io CART_AD[2]        4
+set_io CART_AD[3]        8
+set_io CART_AD[4]        25
+set_io CART_AD[5]        24
+set_io CART_AD[6]        19
+set_io CART_AD[7]        18
+set_io CART_AD[8]        36
+set_io CART_AD[9]        30
+set_io CART_AD[10]       27
+set_io CART_AD[11]       26
+set_io CART_AD[12]       97
+set_io CART_AD[13]       94
+set_io CART_AD[14]       91
+set_io CART_AD[15]       90
+
+set_io CART_RD           1
+set_io CART_ALEL         9
+set_io CART_ALEH         12
+
+###########################################################
+
