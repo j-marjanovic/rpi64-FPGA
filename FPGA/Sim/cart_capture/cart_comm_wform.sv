@@ -99,13 +99,6 @@ initial begin
 	cart_rd 	= 0;
 	cart_alel	= 0;
 	cart_aleh	= 0;
-
-	#(1us);
-
-	single_read(32'h1000_0000, 32'h1240_0037);
-	single_read(32'h1000_0040, 32'hABCD_1234);
-	single_read(32'h1000_0044, 32'hA5B9_0102);
-	single_read(32'h1000_0048, 32'h7788_9900);
 end
 
 endmodule
