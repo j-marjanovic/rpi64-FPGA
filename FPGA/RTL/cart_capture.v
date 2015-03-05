@@ -128,8 +128,12 @@ end
 //==============================================================================
 // Output
 
-assign addr_tmp_ack = valid_o;
-assign data_tmp_ack = valid_o;
+wire valid_s;
+assign valid_s = addr_tmp_valid == 2'b11 && data_tmp_valid == 2'b11;
+
+assign addr_tmp_ack = valid_s;
+assign data_tmp_ack = valid_s;
+
 
 always @(posedge clk) begin
 	if (reset) begin
@@ -139,7 +143,7 @@ always @(posedge clk) begin
 	end else begin
 		valid_o	<= 1'b0;
 
-		if( addr_tmp_valid == 2'b11 && data_tmp_valid == 2'b11 ) begin
+		if( valid_s ) begin
 			addr_o	<= addr_tmp;
 			data_o 	<= data_tmp;
 			valid_o	<= 1'b1;
