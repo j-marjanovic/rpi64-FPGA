@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2014.12.27052 - Bui
 ProjectName=proto1
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=proto1_top.v=work,../../RTL/reset_gen.v=work,../../RTL/SPI_slave.v=work,../../RTL/N64_recv.v=work
+ProjectVFiles=proto1_top.v=work,../../RTL/reset_gen.v=work,../../RTL/N64_recv.v=work,../../RTL/SPI_slave_ext.v=work,../../RTL/cart_capture_synchronizer.v=work,../../RTL/cart_capture.v=work,../../RTL/fifo.v=work
 ProjectCFiles=
 CurImplementation=proto1_Implmnt
 Implementations=proto1_Implmnt

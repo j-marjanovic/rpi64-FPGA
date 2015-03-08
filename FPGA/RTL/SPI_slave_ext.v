@@ -65,7 +65,9 @@ module SPI_slave_ext (
 	input	[63:0]	rdata_i,
 	output reg		read_o,
 	input 			rvalid_i,
-	input	[7:0]	usedw_i
+	input	[7:0]	usedw_i,
+
+	output	[3:0]	debug
 );
 
 
@@ -143,6 +145,7 @@ assign load_tx_reg = (!CS_n_ss && SCLK_negedge) && (bit_cntr == 7);
 
 
 reg [7:0] command;
+assign debug = command[7:4];
 
 always @ (posedge clk) begin
 	if (!CS_n_ss && SCLK_posedge && bit_cntr < 8)

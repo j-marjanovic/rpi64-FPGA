@@ -4,8 +4,11 @@
 
 add_file -verilog -lib work "proto1_top.v" 
 add_file -verilog -lib work "../../RTL/reset_gen.v" 
-add_file -verilog -lib work "../../RTL/SPI_slave.v" 
 add_file -verilog -lib work "../../RTL/N64_recv.v" 
+add_file -verilog -lib work "../../RTL/SPI_slave_ext.v" 
+add_file -verilog -lib work "../../RTL/cart_capture_synchronizer.v" 
+add_file -verilog -lib work "../../RTL/cart_capture.v" 
+add_file -verilog -lib work "../../RTL/fifo.v" 
 #implementation: "proto1_Implmnt"
 impl -add proto1_Implmnt -type fpga
 

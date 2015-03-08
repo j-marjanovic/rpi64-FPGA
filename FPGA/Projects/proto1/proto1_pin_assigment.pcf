@@ -18,6 +18,7 @@ set_io N64_din 89	# CTRL1
 # SPI
 set_io CS_n 49
 set_io MISO 45
+set_io MOSI 46
 set_io SCLK 48 -pullup yes
 
 ###########################################################

@@ -5,7 +5,13 @@ module proto1_top(
 
 	input		SCLK,
 	output 		MISO,
+	input		MOSI,
 	input		CS_n,
+
+	input [15:0]	CART_AD,
+	input			CART_RD,
+	input			CART_ALEL,
+	input			CART_ALEH,
 
 	output	[2:0]	LEDS
 );
@@ -24,7 +30,7 @@ reset_gen  # (
 //=============================================================================
 reg [2:0] 	leds_reg;
 reg [31:0]	leds_cntr;
-assign LEDS = leds_reg;
+//assign LEDS = leds_reg;
 
 /*
 
@@ -83,18 +89,68 @@ N64_recv # (
 	.data_out	( data_out		),
 	.data_valid	( data_valid	)
 );
+//=============================================================================
+
+wire [31:0] cart_addr, cart_data;
+wire		cart_valid;
+
+wire [63:0]	cart_spi_data;
+wire		cart_spi_read;
+wire		cart_spi_valid;
+wire [7:0]	cart_spi_usedw;
+
+cart_capture # (
+	.CLK_FREQ	( 25_000_000	)
+)  cart_capture_inst (
+	.clk		( CLK_25		),	
+	.reset		( reset			),
+
+	.cart_ad	( CART_AD		),
+	.cart_rd	( CART_RD		),
+	.cart_alel	( CART_ALEL		),
+	.cart_aleh	( CART_ALEH		),
+
+	.addr_o		( cart_addr		),
+	.data_o		( cart_data		),
+	.valid_o	( cart_valid	)
+);
+
+fifo fifo_inst (
+	.clk		( CLK_25		),	
+	.reset		( reset			),
+
+	.wdata_i	( {cart_addr, cart_data} ),
+	.wvalid_i	( cart_valid	),
+	.wfull_o	( 				),
+
+	.rdata_o	( cart_spi_data	),
+	.read_i		( cart_spi_read	),
+	.rvalid_o	( cart_spi_valid),
+	.usedw_o	( cart_spi_usedw)
+);
 
 //=============================================================================
-SPI_slave SPI_slave_inst (
+wire [3:0] spi_debug;
+assign LEDS = spi_debug[2:0];
+
+SPI_slave_ext SPI_slave_inst (
 	.clk		( CLK_25		),	
 	.reset		( reset			),
 
 	.SCLK		( SCLK			),
 	.MISO		( MISO			),
+	.MOSI		( MOSI			),
 	.CS_n		( CS_n			),
 
-	.data_in	( data_out		),
-	.data_valid	( data_valid	)
+	.ctrl_present	( 4'b1101	),
+	.ctrl_data	( 128'h1234_5678_9012_3456_7890_1234_5678_9012	),
+
+	.rdata_i	( cart_spi_data	),
+	.read_o		( cart_spi_read	),
+	.rvalid_i	( cart_spi_valid),
+	.usedw_i	( cart_spi_usedw),
+
+	.debug		( spi_debug 	)
 );
 
 endmodule
